@@ -162,8 +162,27 @@ def bfsSearch(init_state, goal_state, grid_size):
                 branch_state = branch.getState()
                 if branch_state not in visited_states:
                     nodes.insert(0, branch)
-  
 
+  
+def checkSolvablity(init_state, grid_size):
+
+    num = grid_size*grid_size
+    inversion_count = 0
+
+    for n in range(0, num-1):
+        current_num = init_state[n]
+
+        for m in range(n, num):
+            if current_num > init_state[m]:
+                if init_state[m] is not 0:
+                    inversion_count = inversion_count + 1
+    print("Inversion count = ", inversion_count)
+    if inversion_count % 2 == 0:
+        print("The puzzle is solvable!")
+        return True
+    else:
+        print("The puzzle is not solvable!")
+        return False
 
 # %%
 def storePath2Txtfile(path, node_path, file_names, grid_size):
@@ -242,14 +261,14 @@ def main():
     print("goal state is: ", goal_state)
     print("solving ....")
 
-    start = timeit.default_timer()
-    path, node_path = bfsSearch(initial_state, goal_state, grid_size)
-    stop = timeit.default_timer()
-    print("Time required: ", stop - start)
-    print("storing it to file ...")
-    storePath2Txtfile(path, node_path, file_names, grid_size)
-    print(path)
-
+    if(checkSolvablity(initial_state, grid_size)):
+        start = timeit.default_timer()
+        path, node_path = bfsSearch(initial_state, goal_state, grid_size)
+        stop = timeit.default_timer()
+        print("Time required: ", stop - start)
+        print("storing it to file ...")
+        storePath2Txtfile(path, node_path, file_names, grid_size)
+        print(path)
 
 # %%
 if __name__ == "__main__":
