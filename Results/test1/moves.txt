@@ -1,9 +1,3 @@
-right
-up
-right
 down
 down
-left
-up
 right
-down
