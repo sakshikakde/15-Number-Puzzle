@@ -2,18 +2,18 @@
 
 project1_sakshi_kakde    
 
---Code
-----NumberPuzzle.ipynb
-----NumberPuzzle.py
+--Code     
+----NumberPuzzle.ipynb     
+----NumberPuzzle.py     
 
---Results
-----test1
-----test2
-----test3
-----test4
-----test5
+--Results      
+----test1      
+----test2    
+----test3    
+----test4    
+----test5    
 
---README.md
+--README.md    
 
 Inside the code structure, the python script is the final code. The python notebook is for development purpose.
 # How to run code
