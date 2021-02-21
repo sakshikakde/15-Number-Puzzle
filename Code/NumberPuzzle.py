@@ -1,12 +1,12 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
-# %%
 import numpy as np
 import timeit
 import argparse
 
 
-# %%
+# Class to store the node info
+# state: Current state of the node
+# parent: The previous state of the node from where the current state is obtained
+# move: The move that was performed on parent node to get the current state
 class Node():
     def __init__(self, state, parent, move, cost): 
 
@@ -48,8 +48,7 @@ class Node():
     def printStats(self):
         pass
 
-
-# %%
+# Func to get children in all possible directions: up, down, left, right
 def getBranches(node, grid_size):
 
     moves = ["up", "down", "left", "right"]
@@ -65,7 +64,7 @@ def getBranches(node, grid_size):
     return b
 
 
-# %%
+# Func to move the blank tile up
 def moveUp(state, grid_size):
 
     state_copy = state.copy()
@@ -83,6 +82,7 @@ def moveUp(state, grid_size):
     else:
         return None
 
+# Func to move the blank tile down
 def moveDown(state, grid_size):
     state_copy = state.copy()
     position = state_copy.index(0)
@@ -99,6 +99,7 @@ def moveDown(state, grid_size):
     else:
         return None
 
+# Func to move the blank tile right
 def moveRight(state, grid_size):
     state_copy = state.copy()
     position = state_copy.index(0)
@@ -116,6 +117,7 @@ def moveRight(state, grid_size):
     else:
         return None
 
+# Func to move the blank tile left
 def moveLeft(state, grid_size):
     state_copy = state.copy()
     position = state_copy.index(0)
@@ -132,13 +134,13 @@ def moveLeft(state, grid_size):
         return None
 
 
-# %%
+# Func to perform BFS search
 def bfsSearch(init_state, goal_state, grid_size):
 
-    nodes = list()
-    visited_states = list()
+    nodes = list() #maintain a list of all possible states till the goal is reached
+    visited_states = list() #maintain a list of all achieved states
 
-    init_node = Node(init_state, 0, None, 0)
+    init_node = Node(init_state, 0, None, 0) #from input
     nodes.append(init_node)
 
     while(nodes):
@@ -156,20 +158,30 @@ def bfsSearch(init_state, goal_state, grid_size):
             return full_path, node_path
 
         else:
-            branches = getBranches(current_node, grid_size) 
+            branches = getBranches(current_node, grid_size) #get chilren
             
             for branch in branches:
                 branch_state = branch.getState()
-                if branch_state not in visited_states:
-                    nodes.insert(0, branch)
+                if branch_state not in visited_states: # check if achieved earlier
+                    nodes.insert(0, branch) # if not, add to visted list
 
+
+# Func to check solvablity
+# if puzzle number is odd: eg. 3
+# get inversion count. if even-> solvable, odd->not solvable
+
+# if puzzle number is even: eg. 4
+# get inversion count and location of 0 from bottom
+# location of 0 from bottom is even AND inversion count is odd -> solvable
+# location of 0 from bottom is odd AND inversion count is even -> solvable
   
 def checkSolvablity(init_state, grid_size):
 
     num = grid_size*grid_size
     inversion_count = 0
 
-    for n in range(0, num-1):
+    
+    for n in range(1, num):
         current_num = init_state[n]
 
         for m in range(n, num):
@@ -177,14 +189,46 @@ def checkSolvablity(init_state, grid_size):
                 if init_state[m] is not 0:
                     inversion_count = inversion_count + 1
     print("Inversion count = ", inversion_count)
-    if inversion_count % 2 == 0:
-        print("The puzzle is solvable!")
-        return True
-    else:
-        print("The puzzle is not solvable!")
-        return False
 
-# %%
+    if (grid_size % 2) == 1: #odd
+        if inversion_count % 2 == 0:
+            print("The puzzle is solvable!")
+            return True
+        else:
+            print("The puzzle is not solvable!")
+            return False
+
+    if (grid_size % 2) == 0: #even
+        position = init_state.index(0)
+        even_indexes = []
+        for r in range(0, grid_size, 2):
+            for c in range(0, grid_size):
+                even_indexes.append(c + r*grid_size)
+        print("Check if 0 is located at any of these: ", even_indexes)
+        
+        if position in even_indexes:
+            if inversion_count % 2 == 1:
+                print("The puzzle is solvable!")
+                return True
+
+            else:
+                print("The puzzle is not solvable!")
+                return False
+        
+        elif position not in even_indexes:
+            if inversion_count % 2 == 0:
+                print("The puzzle is solvable!")
+                return True
+
+            else:
+                print("The puzzle is not solvable!")
+                return False
+
+        else:
+            print("The puzzle is not solvable!")
+            return False
+
+# func to store the path into a .txt file
 def storePath2Txtfile(path, node_path, file_names, grid_size):
     path_file_name = file_names[0]
     node_file_name = file_names[1]
@@ -218,7 +262,8 @@ def storePath2Txtfile(path, node_path, file_names, grid_size):
     
 
 
-# %%
+# Since the derisred order of numbers in .txt file is different that what I used
+# this is a simple function to achive the same
 def formatting(state, grid_size):
     state_copy = np.array(state.copy())
     state_copy = state_copy.reshape(grid_size, grid_size)
@@ -227,12 +272,7 @@ def formatting(state, grid_size):
     state_copy = np.array2string(state_copy, separator=' ')
     return state_copy[1: -1]
 
-class store_as_array(argparse._StoreAction):
-    def __call__(self, parser, namespace, values, option_string=None):
-        values = np.array(values)
-        return super().__call__(parser, namespace, values, option_string)
 
-# %%
 def main():
 
     Parser = argparse.ArgumentParser()
@@ -270,12 +310,11 @@ def main():
         storePath2Txtfile(path, node_path, file_names, grid_size)
         print(path)
 
-# %%
+
 if __name__ == "__main__":
     main()
 
 
-# %%
 
 
 
