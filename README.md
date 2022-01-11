@@ -1,5 +1,7 @@
 
 
+# Problem 
+Solve the 15-Puzzle starting from the given initial state. The final state is [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
 # File structure
     .
     ├── Code
