@@ -1,8 +1,6 @@
 import numpy as np
 import timeit
 import argparse
-
-
 # Class to store the node info
 # state: Current state of the node
 # parent: The previous state of the node from where the current state is obtained
@@ -262,8 +260,8 @@ def storePath2Txtfile(path, node_path, file_names, grid_size):
     
 
 
-# Since the derisred order of numbers in .txt file is different that what I used
-# this is a simple function to achive the same
+# Since the desired order of numbers in .txt file is different that what I used
+# this is a simple function to achieve the same
 def formatting(state, grid_size):
     state_copy = np.array(state.copy())
     state_copy = state_copy.reshape(grid_size, grid_size)
@@ -278,7 +276,7 @@ def main():
     Parser = argparse.ArgumentParser()
     Parser.add_argument("--PuzzleNumber", default = 4, type=int, help = 'Grid size for the puzzle')
     Parser.add_argument("--InitState", nargs='+', type=int, default= '0 2 3 4 1 5 7 8 9 6 11 12 13 10 14 15', help = 'init state for the puzzle')
-    Parser.add_argument('--SaveFolderName', default='/home/sakshi/courses/ENPM661/proj1_sakshi_kakde/Results/test1/', help='Base path of project1 where the results will be saved, Default:/home/sakshi/courses/ENPM661/proj1_sakshi_kakde/Results/test1')
+    Parser.add_argument('--SaveFolderName', default='./Results/test1/', help='Base path of project1 where the results will be saved, Default:./Results/test1')
     
     Args = Parser.parse_args()
     grid_size = Args.PuzzleNumber
